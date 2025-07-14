@@ -1,0 +1,222 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-semibold">Your Applications</h1>
+        <button onclick="showCreateAppModal()" class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+            <i class="fas fa-plus text-lg"></i>
+            Create Application
+        </button>
+    </div>
+
+    <% if (applications.length === 0) { %>
+        <div class="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg p-6 text-center">
+            <div class="text-6xl mb-4">📦</div>
+            <h3 class="text-2xl font-semibold mb-2">No applications yet</h3>
+            <p class="text-gray-600 mb-4">Create your first application to start managing environment variables securely with your team.</p>
+            <button onclick="showCreateAppModal()" class="btn btn-primary btn-lg">
+                Get Started
+            </button>
+        </div>
+    <% } else { %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% applications.forEach(app => { %>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="p-4 border-b">
+                        <h3 class="text-xl font-semibold"><%= app.name %></h3>
+                        <div class="text-gray-500 text-sm"><%= app.id %></div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-4">Created <%= new Date(app.createdAt).toLocaleDateString() %></p>
+                        <div class="flex flex-row flex-wrap gap-6 justify-between items-center mt-2">
+                            <a href="/app/<%= app.id %>" class="flex flex-col items-center text-gray-700 hover:text-primary transition">
+                                <i class="fas fa-arrow-right-to-bracket text-xl mb-1"></i>
+                                <span class="text-base font-medium">View Variables</span>
+                            </a>
+                            <button onclick="showEditAppModal('<%= app.id %>', '<%= app.name %>')" class="flex flex-col items-center text-gray-700 hover:text-blue-600 transition">
+                                <i class="fas fa-pen-to-square text-xl mb-1"></i>
+                                <span class="text-base font-medium">Edit</span>
+                            </button>
+                            <button onclick="deleteApp('<%= app.id %>')" class="flex flex-col items-center text-gray-700 hover:text-red-600 transition">
+                                <i class="fas fa-trash text-xl mb-1"></i>
+                                <span class="text-base font-medium">Delete</span>
+                            </button>
+                            <button onclick="copyToClipboard('<%= app.id %>')" class="flex flex-col items-center text-gray-700 hover:text-primary transition">
+                                <i class="fas fa-copy text-xl mb-1"></i>
+                                <span class="text-base font-medium">Copy ID</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>
+
+<!-- Create Application Modal (Tailwind + Alpine.js) -->
+<div x-data="{ show: false }" x-init="show = false; window.showCreateAppModal = () => { show = true }" x-show="show" x-cloak>
+  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-200">
+    <div @click.away="show = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative animate-fadeIn">
+      <button @click="show = false" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
+      <h2 class="text-2xl font-semibold mb-6 text-center">Create New Application</h2>
+      <form id="createAppForm">
+        <div class="mb-6">
+          <label for="appName" class="block text-sm font-medium text-gray-700 mb-2">Application Name:</label>
+          <input type="text" id="appName" name="name" required placeholder="My Awesome Project" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" autocomplete="off">
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Create Application</button>
+          <button type="button" @click="show = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Application Modal (Tailwind + Alpine.js) -->
+<div x-data="{ show: false, appId: '', appName: '', submitEdit() { fetch(`/app/${this.appId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: this.appName }) }).then(response => response.json()).then(data => { if (data.id) { location.reload(); } else { alert('Failed to update application'); } }).catch(() => { alert('Failed to update application'); }); } }" x-init="show = false; window.showEditAppModal = (id, name) => { appId = id; appName = name; show = true }" x-show="show" x-cloak>
+  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-200">
+    <div @click.away="show = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative animate-fadeIn">
+      <button @click="show = false" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
+      <h2 class="text-2xl font-semibold mb-6 text-center">Edit Application</h2>
+      <form id="editAppForm" @submit.prevent="submitEdit">
+        <input type="hidden" id="editAppId" :value="appId">
+        <div class="mb-6">
+          <label for="editAppName" class="block text-sm font-medium text-gray-700 mb-2">Application Name:</label>
+          <input type="text" id="editAppName" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" autocomplete="off" x-model="appName">
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Update Application</button>
+          <button type="button" @click="show = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function showCreateAppModal() {
+    document.getElementById('createAppModal').style.display = 'block';
+}
+
+function hideCreateAppModal() {
+    document.getElementById('createAppModal').style.display = 'none';
+    document.getElementById('createAppForm').reset();
+}
+
+
+function deleteApp(id) {
+    if (confirm('Are you sure you want to delete this application? All variables will be lost.')) {
+        fetch(`/app/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to delete application');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete application');
+        });
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Create a temporary notification
+        const notification = document.createElement('div');
+        notification.textContent = 'App ID copied to clipboard!';
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: 500;
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
+    }).catch(() => {
+        alert('Failed to copy to clipboard');
+    });
+}
+
+// Create app form submission
+document.getElementById('createAppForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch('/app', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            location.reload();
+        } else {
+            alert('Failed to create application');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to create application');
+    });
+});
+
+// Edit app form submission
+document.getElementById('editAppForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editAppId').value;
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch(`/app/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            location.reload();
+        } else {
+            alert('Failed to update application');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update application');
+    });
+});
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const createModal = document.getElementById('createAppModal');
+    const editModal = document.getElementById('editAppModal');
+    if (event.target === createModal) {
+        hideCreateAppModal();
+    }
+    if (event.target === editModal) {
+        hideEditAppModal();
+    }
+}
+</script>

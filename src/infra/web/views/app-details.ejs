@@ -1,0 +1,247 @@
+<div class="container mx-auto p-4">
+    <!-- Modern Breadcrumb -->
+    <nav class="flex items-center text-sm text-gray-500 mb-4 space-x-2">
+      <a href="/" class="text-blue-600 hover:underline">Applications</a>
+      <span class="mx-1">/</span>
+      <span class="font-medium text-gray-700"><%= application.name %></span>
+    </nav>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold"><%= application.name %></h1>
+        <p class="text-gray-500 mt-1">
+          Created <%= new Date(application.createdAt).toLocaleDateString() %> •
+          <span class="bg-gray-200 rounded px-2 py-1 text-sm"><%= application.id %></span>
+        </p>
+      </div>
+      <button type="button" onclick="showCreateVarModal()" class="inline-flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline-block">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Variable
+      </button>
+    </div>
+
+    <div class="app-info grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="info-card bg-white shadow rounded-lg p-4">
+            <h3 class="font-semibold text-lg mb-2">Application Details</h3>
+            <p class="text-gray-700"><strong>Name:</strong> <%= application.name %></p>
+            <p class="text-gray-700"><strong>Created:</strong> <%= new Date(application.createdAt).toLocaleDateString() %></p>
+            <p class="text-gray-700"><strong>App ID:</strong> <%= application.id %> 
+                <button onclick="copyToClipboard('<%= application.id %>')" class="btn-copy text-blue-600 hover:underline">Copy</button>
+            </p>
+        </div>
+        
+        <div class="info-card bg-white shadow rounded-lg p-4">
+            <h3 class="font-semibold text-lg mb-2">CLI Usage</h3>
+            <p class="text-gray-700">To sync these variables to your local <code class="bg-gray-100 rounded px-1">.env</code> file:</p>
+            <div class="code-block bg-gray-50 p-3 rounded-lg border">
+                <code class="text-sm">npx env-team-vault sync <%= application.id %> --url http://your-vault-url</code>
+                <button onclick="copyToClipboard('npx env-team-vault sync <%= application.id %> --url http://your-vault-url')" class="btn-copy text-blue-600 hover:underline">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="variables-section">
+        <h3 class="text-xl font-semibold mb-4">Environment Variables (<%= variables.length %>)</h3>
+        
+        <% if (variables.length === 0) { %>
+            <div class="empty-state bg-white shadow rounded-lg p-4 text-center">
+                <p class="text-gray-500">No variables defined yet. Add your first environment variable to get started.</p>
+            </div>
+        <% } else { %>
+            <div class="variables-table bg-white shadow rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <% variables.forEach(variable => { %>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= variable.key %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <span class="value-hidden">••••••••</span>
+                                    <span class="value-shown" style="display: none;"><%= variable.value %></span>
+                                    <button onclick="toggleValue(this)" class="btn-toggle text-blue-600 hover:underline text-sm">Show</button>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="showEditVarModal('<%= variable.id %>', '<%= variable.key %>', '<%= variable.value.replace(/'/g, "\\'") %>')" class="btn btn-sm btn-secondary bg-blue-600 hover:bg-blue-700 text-white rounded px-3 py-1 mr-2">Edit</button>
+                                    <button onclick="deleteVariable(<%= variable.id %>)" class="btn btn-sm btn-danger bg-red-600 hover:bg-red-700 text-white rounded px-3 py-1">Delete</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Create Variable Modal (Tailwind + Alpine.js) -->
+<div x-data="{ show: false }" x-init="show = false; window.showCreateVarModal = () => { show = true }" x-show="show" x-cloak>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-200">
+    <div @click.away="show = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative animate-fadeIn">
+      <button @click="show = false" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
+      <h2 class="text-xl font-semibold mb-6 text-center">Add Environment Variable</h2>
+      <form id="createVarForm">
+        <div class="mb-6">
+          <label for="varKey" class="block text-sm font-medium text-gray-700 mb-2">Key:</label>
+          <input type="text" id="varKey" name="key" required placeholder="DATABASE_URL" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" autocomplete="off">
+        </div>
+        <div class="mb-6">
+          <label for="varValue" class="block text-sm font-medium text-gray-700 mb-2">Value:</label>
+          <textarea id="varValue" name="value" required placeholder="postgresql://user:pass@localhost:5432/db" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Add Variable</button>
+          <button type="button" @click="show = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Variable Modal (Tailwind + Alpine.js) -->
+<div x-data="{ show: false, varId: '', varKey: '', varValue: '', submitEdit() { fetch(`/variables/${this.varId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: this.varKey, value: this.varValue }) }).then(response => response.json()).then(data => { if (data.id) { location.reload(); } else { alert('Failed to update variable'); } }).catch(() => { alert('Failed to update variable'); }); } }" x-init="show = false; window.showEditVarModal = (id, key, value) => { varId = id; varKey = key; varValue = value; show = true }" x-show="show" x-cloak>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-200">
+    <div @click.away="show = false" class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative animate-fadeIn">
+      <button @click="show = false" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none">&times;</button>
+      <h2 class="text-xl font-semibold mb-6 text-center">Edit Environment Variable</h2>
+      <form id="editVarForm" @submit.prevent="submitEdit">
+        <input type="hidden" id="editVarId" :value="varId">
+        <div class="mb-6">
+          <label for="editVarKey" class="block text-sm font-medium text-gray-700 mb-2">Key:</label>
+          <input type="text" id="editVarKey" name="key" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" autocomplete="off" x-model="varKey">
+        </div>
+        <div class="mb-6">
+          <label for="editVarValue" class="block text-sm font-medium text-gray-700 mb-2">Value:</label>
+          <textarea id="editVarValue" name="value" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none" x-model="varValue"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Update Variable</button>
+          <button type="button" @click="show = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function deleteVariable(id) {
+    if (confirm('Are you sure you want to delete this variable?')) {
+        fetch(`/variable/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to delete variable');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete variable');
+        });
+    }
+}
+
+function toggleValue(button) {
+    const row = button.closest('tr');
+    const hiddenSpan = row.querySelector('.value-hidden');
+    const shownSpan = row.querySelector('.value-shown');
+    
+    if (hiddenSpan.style.display === 'none') {
+        hiddenSpan.style.display = 'inline';
+        shownSpan.style.display = 'none';
+        button.textContent = 'Show';
+    } else {
+        hiddenSpan.style.display = 'none';
+        shownSpan.style.display = 'inline';
+        button.textContent = 'Hide';
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+    });
+}
+
+// Create variable form submission
+document.getElementById('createVarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch(`/app/<%= application.id %>/variable`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            location.reload();
+        } else {
+            alert(data.error || 'Failed to create variable');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to create variable');
+    });
+});
+
+// Edit variable form submission
+document.getElementById('editVarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editVarId').value;
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    fetch(`/variable/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            location.reload();
+        } else {
+            alert('Failed to update variable');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update variable');
+    });
+});
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const createModal = document.getElementById('createVarModal');
+    const editModal = document.getElementById('editVarModal');
+    if (event.target === createModal) {
+        hideCreateVarModal();
+    }
+    if (event.target === editModal) {
+        hideEditVarModal();
+    }
+}
+</script>

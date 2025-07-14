@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Env Team Vault</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">
+                <a href="/">🔐 Env Team Vault</a>
+            </h1>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <nav class="nav">
+                    <span class="user-info">Welcome, <%= user.name %></span>
+                    <form action="/logout" method="POST" class="logout-form">
+                        <button type="submit" class="btn btn-secondary">Logout</button>
+                    </form>
+                </nav>
+            <% } %>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <%- body %>
+        </div>
+    </main>
+
+    <script>
+        // Basic JavaScript for dynamic functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners and basic interactivity here
+        });
+    </script>
+</body>
+</html>
