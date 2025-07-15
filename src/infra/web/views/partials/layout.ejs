@@ -38,14 +38,14 @@
                 
                 <% if (typeof user !== 'undefined' && user) { %>
                     <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-3 text-gray-300">
+                        <a href="/profile" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
                             <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                                 <span class="text-sm font-semibold text-white">
                                     <%= user.name.charAt(0).toUpperCase() %>
                                 </span>
                             </div>
                             <span class="hidden sm:block font-medium"><%= user.name %></span>
-                        </div>
+                        </a>
                         <form action="/logout" method="POST" class="inline">
                             <button type="submit" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Logout

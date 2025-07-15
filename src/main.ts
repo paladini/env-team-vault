@@ -23,11 +23,15 @@ import { AuthController } from './infra/http/controllers/AuthController';
 import { ApplicationController } from './infra/http/controllers/ApplicationController';
 import { VariableController } from './infra/http/controllers/VariableController';
 import { VaultController } from './infra/http/controllers/VaultController';
+import { ApiTokenController } from './infra/http/controllers/ApiTokenController';
+import { ProfileController } from './infra/http/controllers/ProfileController';
 
 // Routes
 import { createAuthRoutes } from './infra/http/routes/authRoutes';
 import { createAppRoutes } from './infra/http/routes/appRoutes';
 import { createApiRoutes } from './infra/http/routes/apiRoutes';
+import { createApiTokenRoutes } from './infra/http/routes/apiTokenRoutes';
+import { createProfileRoutes } from './infra/http/routes/profileRoutes';
 
 const SQLiteStore = require('connect-sqlite3')(session);
 
@@ -76,6 +80,8 @@ async function createApp() {
   const applicationController = new ApplicationController(applicationService, variableService);
   const variableController = new VariableController(variableService, applicationService);
   const vaultController = new VaultController(variableService, applicationService);
+  const apiTokenController = new ApiTokenController();
+  const profileController = new ProfileController();
 
   // Configure Passport
   configurePassport(userService);
@@ -85,10 +91,18 @@ async function createApp() {
   // Flash messages middleware
   app.use(flash());
 
+  // Middleware para disponibilizar o usuário logado nas views
+  app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+  });
+
   // Routes
   app.use('/', createAuthRoutes(authController));
   app.use('/', createAppRoutes(applicationController, variableController));
   app.use('/api', createApiRoutes(vaultController));
+  app.use('/api', createApiTokenRoutes(apiTokenController));
+  app.use('/', createProfileRoutes(profileController));
 
   // Error handling middleware
   app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

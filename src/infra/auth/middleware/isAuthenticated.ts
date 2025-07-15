@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 
 export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  // Skip session-based authentication for API token endpoints
+  if (req.path.startsWith('/api/vault/')) {
+    return next();
+  }
+
   if (req.isAuthenticated()) {
     return next();
   }

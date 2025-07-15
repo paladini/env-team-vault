@@ -14,7 +14,7 @@
             </h1>
             <% if (typeof user !== 'undefined' && user) { %>
                 <nav class="nav">
-                    <span class="user-info">Welcome, <%= user.name %></span>
+                    <a href="/profile" class="user-info">Welcome, <%= user.name %></a>
                     <form action="/logout" method="POST" class="logout-form">
                         <button type="submit" class="btn btn-secondary">Logout</button>
                     </form>
@@ -30,10 +30,18 @@
     </main>
 
     <script>
-        // Basic JavaScript for dynamic functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add event listeners and basic interactivity here
+      function copySetupCommand(token) {
+        const command = `echo \"API_TOKEN=${token}\" > ~/.env-team-vaultrc`;
+        navigator.clipboard.writeText(command).then(() => {
+          alert('Setup command copied to clipboard!');
+        }).catch(err => {
+          console.error('Failed to copy setup command:', err);
         });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners and basic interactivity here
+      });
     </script>
 </body>
 </html>

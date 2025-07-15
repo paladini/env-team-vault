@@ -22,6 +22,16 @@ model User {
   createdAt    DateTime      @default(now())
   applications Application[]
   auditLogs    AuditLog[]
+  apiTokens    ApiToken[]
+}
+
+model ApiToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  revoked   Boolean  @default(false)
 }
 
 model Application {

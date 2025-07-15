@@ -1,0 +1,69 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-4">User Profile</h1>
+  <div class="bg-white shadow rounded-lg p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-2">Your Info</h2>
+    <p class="text-gray-700"><strong>Name:</strong> <%= user.name %></p>
+    <p class="text-gray-700"><strong>Email:</strong> <%= user.email %></p>
+    <p class="text-gray-700"><strong>Joined:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></p>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-2">API Tokens</h2>
+    <form action="/api/token" method="POST">
+      <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Generate New Token</button>
+    </form>
+    <table class="min-w-full divide-y divide-gray-200 mb-4">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revoked</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% tokens.forEach(token => { %>
+        <tr>
+          <td class="px-6 py-4 text-sm text-gray-700"><span class="font-mono bg-gray-100 px-2 py-1 rounded"><%= token.token %></span></td>
+          <td class="px-6 py-4 text-sm text-gray-700"><%= new Date(token.createdAt).toLocaleString() %></td>
+          <td class="px-6 py-4 text-sm text-gray-700"><%= token.revoked ? 'Yes' : 'No' %></td>
+          <td class="px-6 py-4 text-sm font-medium">
+            <% if (!token.revoked) { %>
+              <button onclick="copyToClipboard('<%= token.token %>')" class="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white rounded px-3 py-1 mr-2">Copy Token</button>
+              <button onclick="copySetupCommand('<%= token.token %>')" class="btn btn-sm bg-green-600 hover:bg-green-700 text-white rounded px-3 py-1">Copy Setup Command</button>
+              <button onclick="revokeToken('<%= token.token %>')" class="btn btn-sm bg-red-600 hover:bg-red-700 text-white rounded px-3 py-1">Revoke</button>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function revokeToken(token) {
+  if (confirm('Are you sure you want to revoke this token?')) {
+    fetch('/api/token/revoke', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) location.reload();
+      else alert('Failed to revoke token');
+    })
+    .catch(() => alert('Failed to revoke token'));
+  }
+}
+
+function copySetupCommand(token) {
+  const command = `echo \"API_TOKEN=${token}\" > ~/.env-team-vaultrc`;
+  navigator.clipboard.writeText(command).then(() => {
+    alert('Setup command copied to clipboard!');
+  }).catch(err => {
+    console.error('Failed to copy setup command:', err);
+  });
+}
+</script>
