@@ -63,6 +63,7 @@ async function createApp() {
   app.set('views', path.join(__dirname, 'infra/web/views'));
   app.use(expressLayouts);
   app.set('layout', 'partials/layout');
+  app.locals.layout = 'partials/layout';
 
   // Initialize repositories
   const userRepository = new PrismaUserRepository(prisma);

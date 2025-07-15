@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Audit - Env Team Vault</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-2xl font-bold mb-4">System Audit</h1>
+        <table class="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">Action</th>
+                    <th class="border border-gray-300 px-4 py-2">Target Type</th>
+                    <th class="border border-gray-300 px-4 py-2">Target ID</th>
+                    <th class="border border-gray-300 px-4 py-2">User ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% logs.forEach(log => { %>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2"><%= log.action %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= log.targetType || 'N/A' %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= log.targetId || 'N/A' %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= log.userId %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= log.createdAt.toISOString() %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Env Team Vault. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

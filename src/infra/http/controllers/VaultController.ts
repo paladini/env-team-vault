@@ -25,6 +25,15 @@ export class VaultController {
         if (!found || found.revoked) {
           return res.status(401).json({ error: 'Invalid or revoked API token' });
         }
+        await prisma.auditLog.create({
+          data: {
+            action: 'SYNC_ENV',
+            targetType: 'Application',
+            targetId: appId,
+            userId: found.userId,
+            createdAt: new Date()
+          }
+        });
       }
       // Validate that application exists
       const application = await this.applicationService.findById(appId);
