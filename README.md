@@ -75,14 +75,18 @@ npm run dev
 
 ### CLI Usage
 
+First of all, you should generate an API Token in order to sync variables from application to your local environment. That's required in order to audit every sync made in the application.
+
 Once you have an application set up with variables, you can sync them to your local development environment:
 
 ```bash
 # Sync variables to your local .env file
 npx env-team-vault sync <APP_ID> --url http://your-vault-url:3000
+env-team-vault sync <APP_ID> --url http://your-vault-url:3000
 
 # Example
 npx env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
+env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
 ```
 
 This will fetch all variables for the specified application and write them to a `.env` file in your current directory.
