@@ -9,10 +9,9 @@
 
   <div class="bg-white shadow rounded-lg p-6 mb-6">
     <h2 class="text-xl font-semibold mb-2">API Tokens</h2>
-    <form action="/api/token" method="POST">
-      <button type="submit" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Generate New Token</button>
-    </form>
-    <table class="min-w-full divide-y divide-gray-200 mb-4">
+    <button id="generateTokenBtn" class="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Generate New Token</button>
+    <div id="tokenFeedback" class="mt-2 text-sm"></div>
+    <table class="min-w-full divide-y divide-gray-200 mb-4" id="tokensTable">
       <thead class="bg-gray-50">
         <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
@@ -21,7 +20,7 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
+      <tbody class="bg-white divide-y divide-gray-200" id="tokensTableBody">
         <% tokens.forEach(token => { %>
         <tr>
           <td class="px-6 py-4 text-sm text-gray-700"><span class="font-mono bg-gray-100 px-2 py-1 rounded"><%= token.token %></span></td>
@@ -38,6 +37,18 @@
         <% }); %>
       </tbody>
     </table>
+    <!-- Setup Instruction Section -->
+    <div class="mt-8 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-6 flex flex-col items-start">
+      <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-200 mb-2 flex items-center gap-2">
+        How to use your API Token
+      </h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-3">To configure your CLI or local environment, run the following command in your terminal (replace <span class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">YOUR_TOKEN</span> with your actual token):</p>
+      <div class="w-full">
+        <pre class="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-sm font-mono text-blue-900 dark:text-blue-100 select-all overflow-x-auto">
+echo "API_TOKEN=YOUR_TOKEN" > ~/.env-team-vaultrc
+        </pre>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -66,4 +77,45 @@ function copySetupCommand(token) {
     console.error('Failed to copy setup command:', err);
   });
 }
+
+document.getElementById('generateTokenBtn').addEventListener('click', function() {
+  const btn = this;
+  const feedback = document.getElementById('tokenFeedback');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  feedback.textContent = '';
+  fetch('/api/token', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.token) {
+        feedback.textContent = 'New token generated!';
+        feedback.className = 'mt-2 text-sm text-green-600';
+        // Add new token to table
+        const tbody = document.getElementById('tokensTableBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-6 py-4 text-sm text-gray-700"><span class="font-mono bg-gray-100 px-2 py-1 rounded">${data.token}</span></td>
+          <td class="px-6 py-4 text-sm text-gray-700">${new Date(data.createdAt).toLocaleString()}</td>
+          <td class="px-6 py-4 text-sm text-gray-700">No</td>
+          <td class="px-6 py-4 text-sm font-medium">
+            <button onclick="copyToClipboard('${data.token}')" class="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white rounded px-3 py-1 mr-2">Copy Token</button>
+            <button onclick="copySetupCommand('${data.token}')" class="btn btn-sm bg-green-600 hover:bg-green-700 text-white rounded px-3 py-1">Copy Setup Command</button>
+            <button onclick="revokeToken('${data.token}')" class="btn btn-sm bg-red-600 hover:bg-red-700 text-white rounded px-3 py-1">Revoke</button>
+          </td>
+        `;
+        tbody.prepend(tr);
+      } else {
+        feedback.textContent = 'Failed to generate token.';
+        feedback.className = 'mt-2 text-sm text-red-600';
+      }
+    })
+    .catch(() => {
+      feedback.textContent = 'Failed to generate token.';
+      feedback.className = 'mt-2 text-sm text-red-600';
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = 'Generate New Token';
+    });
+});
 </script>
