@@ -196,9 +196,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](https://github.com/your-org/env-team-vault/wiki)
-- 🐛 [Issue Tracker](https://github.com/your-org/env-team-vault/issues)
-- 💬 [Discussions](https://github.com/your-org/env-team-vault/discussions)
+- 📖 [Documentation](https://github.com/paladini/env-team-vault/wiki)
+- 🐛 [Issue Tracker](https://github.com/paladini/env-team-vault/issues)
+- 💬 [Discussions](https://github.com/paladini/env-team-vault/discussions)
 
 ---
 
