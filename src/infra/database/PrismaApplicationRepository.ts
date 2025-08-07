@@ -17,9 +17,9 @@ export class PrismaApplicationRepository implements ApplicationRepository {
     });
   }
 
-  async findByUserId(userId: string): Promise<Application[]> {
+  async findByTeamId(teamId: string): Promise<Application[]> {
     return await this.prisma.application.findMany({
-      where: { userId },
+      where: { teamId },
       orderBy: { createdAt: 'desc' }
     });
   }

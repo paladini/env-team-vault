@@ -12,11 +12,13 @@ import { PrismaUserRepository } from './infra/database/PrismaUserRepository';
 import { PrismaApplicationRepository } from './infra/database/PrismaApplicationRepository';
 import { PrismaVariableRepository } from './infra/database/PrismaVariableRepository';
 import { PrismaAuditLogRepository } from './infra/database/PrismaAuditLogRepository';
+import { PrismaTeamRepository } from './infra/database/PrismaTeamRepository';
 
 // Services
 import { UserService } from './core/use-cases/UserService';
 import { ApplicationService } from './core/use-cases/ApplicationService';
 import { VariableService } from './core/use-cases/VariableService';
+import { TeamService } from './core/use-cases/TeamService';
 
 // Controllers
 import { AuthController } from './infra/http/controllers/AuthController';
@@ -25,6 +27,7 @@ import { VariableController } from './infra/http/controllers/VariableController'
 import { VaultController } from './infra/http/controllers/VaultController';
 import { ApiTokenController } from './infra/http/controllers/ApiTokenController';
 import { ProfileController } from './infra/http/controllers/ProfileController';
+import { TeamController } from './infra/http/controllers/TeamController';
 
 // Routes
 import { createAuthRoutes } from './infra/http/routes/authRoutes';
@@ -32,6 +35,7 @@ import { createAppRoutes } from './infra/http/routes/appRoutes';
 import { createApiRoutes } from './infra/http/routes/apiRoutes';
 import { createApiTokenRoutes } from './infra/http/routes/apiTokenRoutes';
 import { createProfileRoutes } from './infra/http/routes/profileRoutes';
+import { createTeamRoutes } from './infra/http/routes/teamRoutes';
 
 const SQLiteStore = require('connect-sqlite3')(session);
 
@@ -60,7 +64,7 @@ async function createApp() {
 
   // View engine setup
   app.set('view engine', 'ejs');
-  app.set('views', path.join(__dirname, 'infra/web/views'));
+  app.set('views', path.join(__dirname, '../src/infra/web/views'));
   app.use(expressLayouts);
   app.set('layout', 'partials/layout');
   app.locals.layout = 'partials/layout';
@@ -70,9 +74,11 @@ async function createApp() {
   const applicationRepository = new PrismaApplicationRepository(prisma);
   const variableRepository = new PrismaVariableRepository(prisma);
   const auditLogRepository = new PrismaAuditLogRepository(prisma);
+  const teamRepository = new PrismaTeamRepository(prisma);
 
   // Initialize services
-  const userService = new UserService(userRepository, auditLogRepository);
+  const teamService = new TeamService(teamRepository, auditLogRepository);
+  const userService = new UserService(userRepository, teamRepository, auditLogRepository, teamService);
   const applicationService = new ApplicationService(applicationRepository, variableRepository, auditLogRepository);
   const variableService = new VariableService(variableRepository, auditLogRepository);
 
@@ -83,6 +89,7 @@ async function createApp() {
   const vaultController = new VaultController(variableService, applicationService);
   const apiTokenController = new ApiTokenController();
   const profileController = new ProfileController();
+  const teamController = new TeamController(teamService, userService, applicationService, variableService);
 
   // Configure Passport
   configurePassport(userService);
@@ -104,6 +111,7 @@ async function createApp() {
   app.use('/api', createApiRoutes(vaultController));
   app.use('/api', createApiTokenRoutes(apiTokenController));
   app.use('/', createProfileRoutes(profileController));
+  app.use('/', createTeamRoutes(teamController));
 
   // Error handling middleware
   app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

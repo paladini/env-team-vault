@@ -19,9 +19,13 @@ export class VariableController {
         return res.status(400).json({ error: 'Key and value are required' });
       }
 
-      // Check if application belongs to user
+      if (!user.teamId) {
+        return res.status(400).json({ error: 'User must be part of a team' });
+      }
+
+      // Check if application belongs to user's team
       const application = await this.applicationService.findById(appId);
-      if (!application || application.userId !== user.id) {
+      if (!application || application.teamId !== user.teamId) {
         return res.status(404).json({ error: 'Application not found' });
       }
 

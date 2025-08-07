@@ -1,0 +1,304 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><%= team.name %></h1>
+          <p class="text-gray-500 dark:text-gray-400 mt-1">Team created on <%= new Date(team.createdAt).toLocaleDateString() %></p>
+        </div>
+        <button onclick="openEditTeamModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition">
+          <i class="fa-solid fa-edit mr-2"></i>Edit Team
+        </button>
+      </div>
+    </div>
+
+    <!-- Team Code Section -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm border border-blue-200 dark:border-blue-700 p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+            🔑 Team Invitation Code
+          </h2>
+          <p class="text-blue-700 dark:text-blue-300 text-sm mb-3">
+            Share this code with new team members so they can join during registration
+          </p>
+          <div class="flex items-center gap-3">
+            <span class="font-mono text-2xl font-bold text-blue-800 dark:text-blue-200 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-blue-300 dark:border-blue-600">
+              <%= team.code %>
+            </span>
+            <button onclick="copyTeamCode('<%= team.code %>')" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
+              <i class="fa-solid fa-copy"></i>Copy Code
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Team Stats -->
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Team Overview</h2>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div class="flex items-center">
+                <i class="fa-solid fa-users text-blue-600 mr-3"></i>
+                <span class="text-gray-700 dark:text-gray-300">Members</span>
+              </div>
+              <span class="text-blue-600 font-semibold"><%= members.length %></span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <div class="flex items-center">
+                <i class="fa-solid fa-layer-group text-green-600 mr-3"></i>
+                <span class="text-gray-700 dark:text-gray-300">Applications</span>
+              </div>
+              <span class="text-green-600 font-semibold"><%= applications.length %></span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+              <div class="flex items-center">
+                <i class="fa-solid fa-code text-purple-600 mr-3"></i>
+                <span class="text-gray-700 dark:text-gray-300">Variables</span>
+              </div>
+              <span class="text-purple-600 font-semibold"><%= totalVariables %></span>
+            </div>
+          </div>
+
+          <!-- Invite Button -->
+          <button onclick="openInviteModal()" class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition">
+            <i class="fa-solid fa-user-plus mr-2"></i>Invite Member
+          </button>
+        </div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Team Members</h2>
+          
+          <div class="space-y-3">
+            <% members.forEach(member => { %>
+            <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  <%= member.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="ml-3">
+                  <p class="font-medium text-gray-900 dark:text-white"><%= member.name %></p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= member.email %></p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded">
+                  Member
+                </span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  Joined <%= new Date(member.createdAt).toLocaleDateString() %>
+                </span>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Applications Section -->
+    <div class="mt-6">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Team Applications</h2>
+          <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">
+            <i class="fa-solid fa-arrow-right mr-1"></i>Manage Apps
+          </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% applications.slice(0, 6).forEach(app => { %>
+          <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-medium text-gray-900 dark:text-white"><%= app.name %></h3>
+              <i class="fa-solid fa-layer-group text-gray-400"></i>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Created <%= new Date(app.createdAt).toLocaleDateString() %>
+            </p>
+          </div>
+          <% }); %>
+          
+          <% if (applications.length === 0) { %>
+          <div class="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+            <i class="fa-solid fa-layer-group text-4xl mb-3"></i>
+            <p>No applications yet</p>
+            <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">Create your first app</a>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Team Modal -->
+<div id="editTeamModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Edit Team</h3>
+    <form id="editTeamForm">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Team Name</label>
+        <input type="text" id="teamName" value="<%= team.name %>" 
+               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+      </div>
+      <div class="flex justify-end space-x-3">
+        <button type="button" onclick="closeEditTeamModal()" 
+                class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+          Cancel
+        </button>
+        <button type="submit" 
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Invite Member Modal -->
+<div id="inviteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invite Team Member</h3>
+    <form id="inviteForm">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+        <input type="email" id="inviteEmail" placeholder="colleague@company.com" required
+               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+        <input type="text" id="inviteName" placeholder="Colleague's name" required
+               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+      </div>
+      <div class="flex justify-end space-x-3">
+        <button type="button" onclick="closeInviteModal()" 
+                class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">
+          Cancel
+        </button>
+        <button type="submit" 
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">
+          Send Invite
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function copyTeamCode(code) {
+  navigator.clipboard.writeText(code).then(() => {
+    // Create a temporary notification
+    const notification = document.createElement('div');
+    notification.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Team code copied to clipboard!';
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #059669;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 1000;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 3000);
+  }).catch(err => {
+    console.error('Failed to copy team code:', err);
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = code;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('Team code copied to clipboard!');
+  });
+}
+
+function openEditTeamModal() {
+  document.getElementById('editTeamModal').classList.remove('hidden');
+  document.getElementById('editTeamModal').classList.add('flex');
+}
+
+function closeEditTeamModal() {
+  document.getElementById('editTeamModal').classList.add('hidden');
+  document.getElementById('editTeamModal').classList.remove('flex');
+}
+
+function openInviteModal() {
+  document.getElementById('inviteModal').classList.remove('hidden');
+  document.getElementById('inviteModal').classList.add('flex');
+}
+
+function closeInviteModal() {
+  document.getElementById('inviteModal').classList.add('hidden');
+  document.getElementById('inviteModal').classList.remove('flex');
+}
+
+// Edit Team Form
+document.getElementById('editTeamForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('teamName').value;
+  
+  try {
+    const response = await fetch('/teams/<%= team.id %>', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    
+    if (response.ok) {
+      location.reload();
+    } else {
+      const error = await response.json();
+      alert('Error: ' + error.error);
+    }
+  } catch (error) {
+    alert('Error updating team: ' + error.message);
+  }
+});
+
+// Invite Form
+document.getElementById('inviteForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('inviteEmail').value;
+  const name = document.getElementById('inviteName').value;
+  
+  try {
+    const response = await fetch('/teams/<%= team.id %>/invite', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name })
+    });
+    
+    if (response.ok) {
+      closeInviteModal();
+      location.reload();
+    } else {
+      const error = await response.json();
+      alert('Error: ' + error.error);
+    }
+  } catch (error) {
+    alert('Error inviting member: ' + error.message);
+  }
+});
+</script>

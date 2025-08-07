@@ -16,8 +16,9 @@ A simple, self-hosted platform for sharing and synchronizing environment variabl
 ## Features
 
 - 🔐 **User Authentication**: Secure login/registration system with audit trails
-- 📱 **Web Interface**: Clean, responsive web UI for managing applications and variables
-- 🔑 **Application Management**: Create and organize multiple applications/projects
+- � **Team Management**: Organize users into teams for better collaboration
+- �📱 **Web Interface**: Clean, responsive web UI for managing applications and variables
+- 🔑 **Application Management**: Create and organize multiple applications/projects per team
 - 🌍 **Environment Variables**: Add, edit, and delete environment variables per application
 - 📋 **CLI Integration**: Command-line tool for syncing variables to local `.env` files
 - 📊 **Audit Logging**: Track all changes and access for security and compliance
@@ -69,13 +70,16 @@ npm run dev
 ### Web Interface
 
 1. **Register/Login**: Create an account or log in to access the dashboard
-2. **Create Application**: Add a new application/project to manage
-3. **Add Variables**: Define environment variables for your application
-4. **Copy App ID**: Each application has a unique ID used for CLI access
+2. **Create Team**: During registration, create your team (required)
+3. **Team Management**: Access `/team` to manage team members and view team statistics
+4. **Invite Members**: Add new team members by email directly from the team page
+5. **Create Application**: Add a new application/project to manage (team-based)
+6. **Add Variables**: Define environment variables for your application
+7. **Copy App ID**: Each application has a unique ID used for CLI access
 
 ### CLI Usage
 
-First of all, you should generate an API Token in order to sync variables from application to your local environment. That's required in order to audit every sync made in the application.
+**Important Security Note**: CLI access requires API token authentication. Generate an API Token in your profile to sync variables from your team's applications to your local environment. This ensures all sync operations are audited and secure.
 
 Once you have an application set up with variables, you can sync them to your local development environment:
 
@@ -87,9 +91,10 @@ env-team-vault sync <APP_ID> --url http://your-vault-url:3000
 # Example
 npx env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
 env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
+env-team-vault sync 320cbca3-4063-4f1c-bf51-9083729c9190 --url http://localhost:3000
 ```
 
-This will fetch all variables for the specified application and write them to a `.env` file in your current directory.
+This will fetch all variables for the specified application (if it belongs to your team) and write them to a `.env` file in your current directory.
 
 ## API Reference
 
@@ -125,13 +130,33 @@ For production deployment:
 3. Set up regular database backups
 4. Monitor application logs and health
 
-## Security Considerations
 
-- Application IDs serve as access tokens for the CLI API
-- All user actions are logged for audit purposes
-- Sessions are stored securely with configurable expiration
-- Passwords are hashed using bcrypt
-- The application is designed for trusted team environments
+## Audit Events
+
+Env Team Vault automatically records audit events for all critical actions performed by users and the system. These logs provide transparency, accountability, and traceability for your team's environment management.
+
+### List of Audit Events
+
+| Event                | Description                                                      |
+|----------------------|------------------------------------------------------------------|
+| USER_REGISTERED      | A new user registered an account                                 |
+| USER_LOGIN           | A user logged in to the system                                   |
+| APPLICATION_CREATED  | A new application was created                                    |
+| APPLICATION_UPDATED  | An application was updated                                       |
+| APPLICATION_DELETED  | An application was deleted                                       |
+| VARIABLE_CREATED     | An environment variable was created                              |
+| VARIABLE_UPDATED     | An environment variable was updated                              |
+| VARIABLE_DELETED     | An environment variable was deleted                              |
+| SYNC_ENV             | Environment variables were synced via CLI/API                    |
+
+Each audit log records:
+- **Action**: The type of event (see above)
+- **Target Type**: The entity affected (User, Application, Variable)
+- **Target ID**: The unique identifier of the affected entity
+- **User ID**: The user who performed the action
+- **Timestamp**: When the event occurred
+
+See [docs/audit.md](docs/audit.md) for more details.
 
 ## Development
 
@@ -186,13 +211,14 @@ For production deployment:
 
 ## Roadmap
 
+- [x] **Team Management**: Role-based access control (✅ Implemented)
 - [ ] **SSO Integration**: Google and Microsoft OAuth support
 - [ ] **CLI Package**: Standalone npm package for the CLI tool
 - [ ] **Import/Export**: Bulk import/export of environment variables
 - [ ] **Variable History**: Track changes to individual variables
-- [ ] **Team Management**: Role-based access control
+- [ ] **Advanced Team Roles**: Admin, Member, and Read-only permissions
 - [ ] **Webhooks**: Notifications for variable changes
-- [ ] **API Keys**: Alternative authentication for CLI access
+- [ ] **Environment-specific Variables**: Development, staging, production environments
 
 ## License
 
