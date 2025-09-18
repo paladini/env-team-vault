@@ -3,7 +3,7 @@ import { Application, CreateApplicationDTO, UpdateApplicationDTO } from '../enti
 export interface ApplicationRepository {
   create(application: CreateApplicationDTO): Promise<Application>;
   findById(id: string): Promise<Application | null>;
-  findByUserId(userId: string): Promise<Application[]>;
+  findByTeamId(teamId: string): Promise<Application[]>;
   update(id: string, application: UpdateApplicationDTO): Promise<Application | null>;
   delete(id: string): Promise<boolean>;
 }

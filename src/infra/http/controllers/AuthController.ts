@@ -29,14 +29,45 @@ export class AuthController {
   // POST /register
   postRegister = async (req: Request, res: Response) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, teamOption, teamName, teamCode } = req.body;
 
       if (!name || !email || !password) {
-        req.flash('error', 'All fields are required');
+        req.flash('error', 'Name, email and password are required');
         return res.redirect('/register');
       }
 
-      const user = await this.userService.register({ name, email, password });
+      let user;
+
+      if (teamOption === 'create') {
+        // Create new team
+        if (!teamName) {
+          req.flash('error', 'Team name is required when creating a new team');
+          return res.redirect('/register');
+        }
+
+        user = await this.userService.registerWithTeam({ 
+          name, 
+          email, 
+          password,
+          teamName: teamName.trim()
+        });
+      } else if (teamOption === 'join') {
+        // Join existing team
+        if (!teamCode) {
+          req.flash('error', 'Team code is required when joining an existing team');
+          return res.redirect('/register');
+        }
+
+        user = await this.userService.registerWithCode({
+          name,
+          email,
+          password,
+          teamCode: teamCode.trim().toUpperCase()
+        });
+      } else {
+        req.flash('error', 'Please select whether to create a new team or join an existing one');
+        return res.redirect('/register');
+      }
       
       // Auto login after registration
       req.login(user, (err) => {

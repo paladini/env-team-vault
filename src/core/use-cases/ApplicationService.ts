@@ -11,10 +11,7 @@ export class ApplicationService {
   ) {}
 
   async create(applicationData: CreateApplicationDTO, userId: string): Promise<Application> {
-    const application = await this.applicationRepository.create({
-      ...applicationData,
-      userId
-    });
+    const application = await this.applicationRepository.create(applicationData);
 
     // Create audit log
     await this.auditLogRepository.create({
@@ -31,8 +28,8 @@ export class ApplicationService {
     return await this.applicationRepository.findById(id);
   }
 
-  async findByUserId(userId: string): Promise<Application[]> {
-    return await this.applicationRepository.findByUserId(userId);
+  async findByTeamId(teamId: string): Promise<Application[]> {
+    return await this.applicationRepository.findByTeamId(teamId);
   }
 
   async update(id: string, applicationData: UpdateApplicationDTO, userId: string): Promise<Application | null> {

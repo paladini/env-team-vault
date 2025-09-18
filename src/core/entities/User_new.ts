@@ -21,13 +21,6 @@ export interface RegisterWithTeamDTO {
   teamName: string;
 }
 
-export interface RegisterWithCodeDTO {
-  name: string;
-  email: string;
-  password: string;
-  teamCode: string;
-}
-
 export interface LoginDTO {
   email: string;
   password: string;

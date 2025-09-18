@@ -17,6 +17,8 @@ export class VaultController {
   getEnvFile = async (req: Request, res: Response) => {
     try {
       const { appId } = req.params;
+      let userId: string | null = null;
+      
       // API Token authentication
       const authHeader = req.headers.authorization;
       if (authHeader) {
@@ -25,21 +27,44 @@ export class VaultController {
         if (!found || found.revoked) {
           return res.status(401).json({ error: 'Invalid or revoked API token' });
         }
+        userId = found.userId;
+        
+        // Get user to check team membership
+        const user = await prisma.user.findUnique({
+          where: { id: userId }
+        }) as any;
+        
+        if (!user || !user.teamId) {
+          return res.status(403).json({ error: 'User must be part of a team' });
+        }
+        
+        // Validate that application exists and belongs to user's team
+        const application = await this.applicationService.findById(appId);
+        if (!application) {
+          return res.status(404).json({ error: 'Application not found' });
+        }
+        
+        if (application.teamId !== user.teamId) {
+          return res.status(403).json({ error: 'Access denied: Application does not belong to your team' });
+        }
+        
         await prisma.auditLog.create({
           data: {
             action: 'SYNC_ENV',
             targetType: 'Application',
             targetId: appId,
-            userId: found.userId,
+            userId: userId,
             createdAt: new Date()
           }
         });
+      } else {
+        // Validate that application exists (for backward compatibility without auth)
+        const application = await this.applicationService.findById(appId);
+        if (!application) {
+          return res.status(404).json({ error: 'Application not found' });
+        }
       }
-      // Validate that application exists
-      const application = await this.applicationService.findById(appId);
-      if (!application) {
-        return res.status(404).json({ error: 'Application not found' });
-      }
+      
       // Get environment variables as .env format
       const envContent = await this.variableService.getEnvFileContent(appId);
       res.setHeader('Content-Type', 'text/plain');

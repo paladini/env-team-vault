@@ -38,6 +38,14 @@
                 
                 <% if (typeof user !== 'undefined' && user) { %>
                     <div class="flex items-center space-x-4">
+                        <a href="/" class="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-lg">
+                            <i class="fas fa-layer-group mr-2"></i>Apps
+                        </a>
+                        <% if (user.teamId) { %>
+                        <a href="/team" class="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-lg">
+                            <i class="fas fa-users mr-2"></i>Team
+                        </a>
+                        <% } %>
                         <a href="/profile" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
                             <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                                 <span class="text-sm font-semibold text-white">
