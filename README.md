@@ -90,12 +90,11 @@ Once you have an application set up with variables, you can sync them to your lo
 
 ```bash
 # Sync variables to your local .env file
-npx env-team-vault sync <APP_ID> --url http://your-vault-url:3000
-env-team-vault sync <APP_ID> --url http://your-vault-url:3000
+npx env-team-vault sync <APP_ID> --url http://localhost:3000
+env-team-vault sync <APP_ID> --url http://localhost:3000
 
 # Example
 npx env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
-env-team-vault sync 123e4567-e89b-12d3-a456-426614174000 --url http://localhost:3000
 env-team-vault sync 320cbca3-4063-4f1c-bf51-9083729c9190 --url http://localhost:3000
 ```
 
@@ -225,7 +224,7 @@ env-team-vault/
 
 - [x] **Team Management**: Role-based access control (✅ Implemented)
 - [ ] **SSO Integration**: Google and Microsoft OAuth support
-- [ ] **CLI Package**: Standalone npm package for the CLI tool
+- [x] **CLI Package**: Standalone npm package for the CLI tool
 - [ ] **Import/Export**: Bulk import/export of environment variables
 - [ ] **Variable History**: Track changes to individual variables
 - [ ] **Advanced Team Roles**: Admin, Member, and Read-only permissions
