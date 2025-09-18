@@ -2,12 +2,14 @@
 
 A simple, self-hosted platform for sharing and synchronizing environment variables for local development between team members.
 
+Demo: [https://youtu.be/Yu-UBjnR45E](https://youtu.be/Yu-UBjnR45E)
+
 ## Overview
 
 **Env Team Vault** is designed to solve one specific problem: keeping your team's local `.env` files synchronized without sending them via Slack or email. It provides a central, secure, and audited place to manage the configuration variables that developers use on their local machines.
 
 <img width="1551" height="899" alt="image" src="https://github.com/user-attachments/assets/95d32ffb-2846-407d-9788-3ec9577c2772" />
-
+<img width="1615" height="784" alt="image" src="https://github.com/user-attachments/assets/bcd99ed9-a57f-4d7f-8abb-2fb9ec8a5d3c" />
 
 ### Philosophy
 
@@ -19,8 +21,8 @@ A simple, self-hosted platform for sharing and synchronizing environment variabl
 ## Features
 
 - 🔐 **User Authentication**: Secure login/registration system with audit trails
-- � **Team Management**: Organize users into teams for better collaboration
-- �📱 **Web Interface**: Clean, responsive web UI for managing applications and variables
+- 👪 **Team Management**: Organize users into teams for better collaboration
+- 📱 **Web Interface**: Clean, responsive web UI for managing applications and variables
 - 🔑 **Application Management**: Create and organize multiple applications/projects per team
 - 🌍 **Environment Variables**: Add, edit, and delete environment variables per application
 - 📋 **CLI Integration**: Command-line tool for syncing variables to local `.env` files
