@@ -6,6 +6,9 @@ A simple, self-hosted platform for sharing and synchronizing environment variabl
 
 **Env Team Vault** is designed to solve one specific problem: keeping your team's local `.env` files synchronized without sending them via Slack or email. It provides a central, secure, and audited place to manage the configuration variables that developers use on their local machines.
 
+<img width="1551" height="899" alt="image" src="https://github.com/user-attachments/assets/95d32ffb-2846-407d-9788-3ec9577c2772" />
+
+
 ### Philosophy
 
 - **Simplicity first**: This is not meant to compete with enterprise solutions like Doppler, Infisical, or HashiCorp Vault
