@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Env Team Vault - Compartilhe variáveis de ambiente com sua equipe de forma segura</title>
+    <meta name="description" content="Uma plataforma self-hosted simples para compartilhar e sincronizar variáveis de ambiente para desenvolvimento local entre membros da equipe.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/img/favicon.png" type="image/png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Env Team Vault - Sincronize suas variáveis de ambiente">
+    <meta property="og:description" content="Compartilhe e sincronize variáveis de ambiente para desenvolvimento local entre membros da equipe.">
+    <meta property="og:image" content="https://paladini.github.io/env-team-vault/assets/img/og-image.jpg">
+    <meta property="og:url" content="https://paladini.github.io/env-team-vault/">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Env Team Vault - Sincronize suas variáveis de ambiente">
+    <meta name="twitter:description" content="Compartilhe e sincronize variáveis de ambiente para desenvolvimento local entre membros da equipe.">
+    <meta name="twitter:image" content="https://paladini.github.io/env-team-vault/assets/img/og-image.jpg">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <img src="assets/img/logo.svg" alt="Env Team Vault Logo">
+                    <span>Env Team Vault</span>
+                </a>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#features">Funcionalidades</a></li>
+                        <li><a href="#how-it-works">Como Funciona</a></li>
+                        <li><a href="#use-cases">Casos de Uso</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Chega de compartilhar <code>.env</code> no Slack ou Email</h1>
+                    <p class="subtitle">
+                        Uma plataforma self-hosted, simples e segura para gerenciar e sincronizar as variáveis de ambiente 
+                        do seu time para ambientes de desenvolvimento local.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#get-started" class="btn btn-primary">Começar Agora</a>
+                        <a href="https://youtu.be/Yu-UBjnR45E" target="_blank" class="btn btn-secondary">
+                            <i class="fas fa-play-circle"></i> Ver Demo
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Funcionalidades Principais</h2>
+                <p>Projetado especificamente para ambientes de desenvolvimento local</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Gerenciamento de Equipes</h3>
+                    <p>Organize usuários em equipes para melhor colaboração e controle de acesso às variáveis.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Autenticação Segura</h3>
+                    <p>Sistema completo de login/registro com trilhas de auditoria para todas as ações.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Interface Web Responsiva</h3>
+                    <p>Interface limpa e intuitiva para gerenciar aplicações e variáveis de ambiente.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Integração CLI</h3>
+                    <p>Ferramenta de linha de comando para sincronizar variáveis com arquivos .env locais.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Logs de Auditoria</h3>
+                    <p>Rastreie todas as mudanças e acessos para segurança e conformidade.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <h3>Docker Ready</h3>
+                    <p>Implantação fácil com Docker e Docker Compose para ambientes auto-hospedados.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Como Funciona</h2>
+                <p>Simples de configurar, fácil de usar</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Configure seu Vault</h3>
+                        <p>Instale o Env Team Vault em seu servidor ou use Docker para implantação rápida.</p>
+                        <pre><code>docker-compose up -d</code></pre>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Crie Aplicações e Equipes</h3>
+                        <p>Adicione novas aplicações e organize seus desenvolvedores em equipes para colaboração.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Adicione Variáveis de Ambiente</h3>
+                        <p>Defina variáveis de ambiente para cada aplicação através da interface web.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Gere sua API Token</h3>
+                        <p>Acesse seu perfil e gere uma API Token pessoal para autenticar a sincronização de forma segura.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Configure seu Ambiente Local</h3>
+                        <p>Configure a CLI em seu ambiente com sua API Token para ter acesso às aplicações do seu time.</p>
+                        <pre><code>echo "API_TOKEN=YOUR_TOKEN" > ~/.env-team-vaultrc</code></pre>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Sincronize com CLI</h3>
+                        <p>Desenvolvedores usam a CLI para sincronizar variáveis com seus arquivos .env locais.</p>
+                        <pre><code>npx env-team-vault sync &lt;APP_ID&gt; --url http://localhost:3000</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="use-cases-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Casos de Uso</h2>
+                <p>Como equipes utilizam o Env Team Vault</p>
+            </div>
+            <div class="use-cases">
+                <div class="use-case">
+                    <div class="use-case-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Onboarding de Desenvolvedores</h3>
+                        <p>Novos membros da equipe podem configurar seu ambiente de desenvolvimento em minutos, sem pedir arquivos .env para colegas.</p>
+                        <ul>
+                            <li>Elimina bloqueios de início do trabalho</li>
+                            <li>Garante ambientes consistentes</li>
+                            <li>Reduz atrito durante a integração</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Atualizações de Configuração</h3>
+                        <p>Quando credenciais ou URLs mudam, atualize uma vez no Vault e todos os desenvolvedores podem sincronizar.</p>
+                        <ul>
+                            <li>Evita variáveis desatualizadas</li>
+                            <li>Notificação centralizada de mudanças</li>
+                            <li>Histórico de alterações com auditoria</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="use-case">
+                    <div class="use-case-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Gerenciamento Multi-projeto</h3>
+                        <p>Times que trabalham em vários projetos podem gerenciar todas as variáveis de ambiente em um único lugar.</p>
+                        <ul>
+                            <li>Organização por equipe e projeto</li>
+                            <li>Visão unificada de todas configurações</li>
+                            <li>Consistência entre projetos relacionados</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section id="get-started" class="get-started-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Comece Agora</h2>
+                <p>Configure seu próprio Env Team Vault em minutos</p>
+            </div>
+            <div class="get-started-content">
+                <div class="install-options">
+                    <div class="install-option">
+                        <h3>Usando Docker (Recomendado)</h3>
+                        <pre><code>git clone https://github.com/paladini/env-team-vault.git
+cd env-team-vault
+docker-compose up -d</code></pre>
+                        <p>Acesse <code>http://localhost:3000</code> e crie sua conta!</p>
+                    </div>
+                    <div class="install-option">
+                        <h3>Instalação Manual</h3>
+                        <pre><code>git clone https://github.com/paladini/env-team-vault.git
+cd env-team-vault
+npm install
+npm run prisma:migrate
+npm run dev</code></pre>
+                    </div>
+                </div>
+                <div class="cta-container center">
+                    <a href="https://github.com/paladini/env-team-vault" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fab fa-github"></i> Ver no GitHub
+                    </a>
+                    <a href="https://www.npmjs.com/package/env-team-vault" class="btn btn-secondary btn-large" target="_blank">
+                        <i class="fab fa-npm"></i> Pacote NPM
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Por que Env Team Vault?</h2>
+                <p>Uma alternativa simples e focada para times de desenvolvimento</p>
+            </div>
+            <div class="comparison-table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Recursos</th>
+                            <th>Env Team Vault</th>
+                            <th>Solutions Empresariais (Doppler, Vault)</th>
+                            <th>Compartilhar via Slack/Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Foco em desenvolvimento local</td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-xmark red"></i></td>
+                            <td><i class="fas fa-check green"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Auditoria e segurança</td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-xmark red"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Auto-hospedado (controle total)</td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td>Varia</td>
+                            <td><i class="fas fa-xmark red"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Gestão de equipes</td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-xmark red"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Complexidade</td>
+                            <td>Baixa</td>
+                            <td>Alta</td>
+                            <td>Baixa</td>
+                        </tr>
+                        <tr>
+                            <td>Custo</td>
+                            <td>Gratuito</td>
+                            <td>$$$ a $$$$</td>
+                            <td>Gratuito</td>
+                        </tr>
+                        <tr>
+                            <td>Integração CLI</td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-check green"></i></td>
+                            <td><i class="fas fa-xmark red"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Pronto para melhorar o fluxo de trabalho da sua equipe?</h2>
+                <p>Pare de compartilhar arquivos .env por Slack. Comece a usar o Env Team Vault hoje.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/paladini/env-team-vault" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fab fa-github"></i> Obtenha no GitHub
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline btn-large">
+                        Saiba como funciona
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Env Team Vault. Distribuído sob licença MIT.</p>
+                <div class="social-links">
+                    <a href="https://github.com/paladini/env-team-vault" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.npmjs.com/package/env-team-vault" target="_blank"><i class="fab fa-npm"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

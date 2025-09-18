@@ -241,6 +241,27 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📖 [Documentation](https://github.com/paladini/env-team-vault/wiki)
 - 🐛 [Issue Tracker](https://github.com/paladini/env-team-vault/issues)
 - 💬 [Discussions](https://github.com/paladini/env-team-vault/discussions)
+- 🌐 [Website](https://paladini.github.io/env-team-vault/)
+
+## Website
+
+We have a promotional website for Env Team Vault that showcases its features and benefits. You can visit it at [https://paladini.github.io/env-team-vault/](https://paladini.github.io/env-team-vault/).
+
+### Running the Website Locally
+
+If you want to run the promotional website locally:
+
+```bash
+# Using any HTTP server, for example:
+cd docs
+python -m http.server 8000
+```
+
+Then visit `http://localhost:8000` in your browser.
+
+### Deploying the Website
+
+The website is automatically deployed to GitHub Pages when changes are pushed to the `main` branch. The GitHub Actions workflow defined in `.github/workflows/gh-pages.yml` handles the deployment process.
 
 ---
 
