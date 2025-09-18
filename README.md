@@ -168,23 +168,30 @@ See [docs/audit.md](docs/audit.md) for more details.
 ### Project Structure
 
 ```
-/env-team-vault
-├── prisma/                 # Database schema and migrations
-├── public/                 # Static assets (CSS, images)
+env-team-vault/
+├── prisma/
+│   ├── schema.prisma          # Schema do banco de dados
+│   └── prod.db               # Banco SQLite (criado automaticamente)
+├── public/
+│   └── css/
+│       └── style.css         # Estilos da aplicação
 ├── src/
-│   ├── core/              # Business logic and entities
-│   │   ├── entities/      # Domain entities
-│   │   ├── repositories/  # Repository interfaces
-│   │   └── use-cases/     # Business use cases
-│   ├── infra/             # Infrastructure layer
-│   │   ├── auth/          # Authentication (Passport.js)
-│   │   ├── database/      # Database repositories (Prisma)
-│   │   ├── http/          # HTTP layer (controllers, routes)
-│   │   └── web/           # Web templates (EJS)
-│   └── main.ts            # Application entry point
-├── docker-compose.yml     # Docker composition
-├── Dockerfile            # Container definition
-└── package.json          # Dependencies and scripts
+│   ├── core/                 # Camada de domínio (Clean Architecture)
+│   │   ├── entities/         # Entidades de domínio
+│   │   ├── repositories/     # Interfaces dos repositórios
+│   │   └── use-cases/        # Casos de uso/serviços
+│   ├── infra/               # Camada de infraestrutura
+│   │   ├── auth/            # Configuração do Passport.js
+│   │   ├── database/        # Implementação Prisma
+│   │   ├── http/            # Controllers e rotas Express
+│   │   └── web/             # Views EJS
+│   ├── types/               # Definições de tipos TypeScript
+│   └── main.ts              # Ponto de entrada da aplicação
+├── docker-compose.yml       # Configuração Docker Compose
+├── Dockerfile              # Configuração Docker
+├── package.json           # Dependências e scripts
+├── tsconfig.json         # Configuração TypeScript
+└── README.md            # Documentação
 ```
 
 ### Available Scripts
