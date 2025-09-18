@@ -1,0 +1,37 @@
+{
+  "name": "env-team-vault",
+  "version": "1.0.1",
+  "description": "CLI client for env-team-vault - easily sync environment variables for local development",
+  "main": "index.js",
+  "bin": {
+    "env-team-vault": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "environment-variables",
+    "team-collaboration",
+    "development-tools",
+    "cli",
+    "env",
+    "dotenv"
+  ],
+  "author": "Fernando Paladini <fnpaladini@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "yargs": "^17.7.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paladini/env-team-vault.git"
+  },
+  "bugs": {
+    "url": "https://github.com/paladini/env-team-vault/issues"
+  },
+  "homepage": "https://github.com/paladini/env-team-vault#readme"
+}
