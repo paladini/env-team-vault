@@ -2,6 +2,8 @@
 
 A simple, self-hosted platform for sharing and synchronizing environment variables for local development between team members.
 
+Official Website: [https://paladini.github.io/env-team-vault/](https://paladini.github.io/env-team-vault/)
+
 Demo: [https://youtu.be/Yu-UBjnR45E](https://youtu.be/Yu-UBjnR45E)
 
 NPM Package: [https://www.npmjs.com/package/env-team-vault](https://www.npmjs.com/package/env-team-vault)
