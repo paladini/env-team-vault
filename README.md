@@ -173,28 +173,28 @@ See [docs/audit.md](docs/audit.md) for more details.
 ```
 env-team-vault/
 ├── prisma/
-│   ├── schema.prisma          # Schema do banco de dados
-│   └── prod.db               # Banco SQLite (criado automaticamente)
+│   ├── schema.prisma          
+│   └── prod.db               
 ├── public/
 │   └── css/
-│       └── style.css         # Estilos da aplicação
+│       └── style.css         
 ├── src/
-│   ├── core/                 # Camada de domínio (Clean Architecture)
-│   │   ├── entities/         # Entidades de domínio
-│   │   ├── repositories/     # Interfaces dos repositórios
-│   │   └── use-cases/        # Casos de uso/serviços
-│   ├── infra/               # Camada de infraestrutura
-│   │   ├── auth/            # Configuração do Passport.js
-│   │   ├── database/        # Implementação Prisma
-│   │   ├── http/            # Controllers e rotas Express
-│   │   └── web/             # Views EJS
-│   ├── types/               # Definições de tipos TypeScript
-│   └── main.ts              # Ponto de entrada da aplicação
-├── docker-compose.yml       # Configuração Docker Compose
-├── Dockerfile              # Configuração Docker
-├── package.json           # Dependências e scripts
-├── tsconfig.json         # Configuração TypeScript
-└── README.md            # Documentação
+│   ├── core/                 
+│   │   ├── entities/         
+│   │   ├── repositories/     
+│   │   └── use-cases/        
+│   ├── infra/               
+│   │   ├── auth/            
+│   │   ├── database/        
+│   │   ├── http/            
+│   │   └── web/             
+│   ├── types/               
+│   └── main.ts              
+├── docker-compose.yml       
+├── Dockerfile              
+├── package.json           
+├── tsconfig.json         
+└── README.md            
 ```
 
 ### Available Scripts
